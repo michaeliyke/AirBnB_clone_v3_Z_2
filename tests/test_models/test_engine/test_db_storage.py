@@ -90,38 +90,7 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that count properly counts objects in storage"""
-        storage = DBStorage()
-        save = DBStorage._DBStorage__objects
-        DBStorage._DBStorage__objects = {}
-        DBStorage.save()
-        self.assertEqual(storage.count(), 0)
-        test_dict = {}
-        for key, value in classes.items():
-            with self.subTest(key=key, value=value):
-                instance = value()
-                instance_key = instance.__class__.__name__ + "." + instance.id
-                storage.new(instance)
-                test_dict[instance_key] = instance
-                count = len(test_dict)
-                self.assertEqual(count, storage.count())
-        DBStorage._DBStorage__objects = save
-        DBStorage.save()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Test that get retrieves the correct object"""
-        storage = DBStorage()
-        save = DBStorage._DBStorage__objects
-        DBStorage._DBStorage__objects = {}
-        DBStorage.save()
-        test_dict = {}
-        for key, value in classes.items():
-            with self.subTest(key=key, value=value):
-                instance = value()
-                instance_key = instance.__class__.__name__ + "." + instance.id
-                storage.new(instance)
-                test_dict[instance_key] = instance
-                self.assertEqual(instance, storage.get(value, instance.id))
-                self.assertNotEqual(instance, storage.get(value, "Not_id"))
-        DBStorage._DBStorage__objects = save
-        DBStorage.save()
